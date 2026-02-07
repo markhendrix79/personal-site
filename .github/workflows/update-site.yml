@@ -22,7 +22,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Update S3 bucket
-        run: aws s3 sync site/ s3://markhendrix.com --delete
+        run: aws s3 sync site/ s3://markhendrix.com --delete --size-only
 
       - name: Invalidate CloudFront Distribution
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID}}
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID}} --paths "/*"
