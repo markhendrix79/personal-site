@@ -1,0 +1,28 @@
+name: Update Personal Website
+
+on:
+  push:
+    paths:
+      - 'site/**'
+
+permissions:
+  id-token: write
+
+jobs:
+  update-website:
+    runs-on: ubuntu-slim
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6.0.0
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Update S3 bucket
+        run: aws s3 sync site/ s3://markhendrix.com --delete
+
+      - name: Invalidate CloudFront Distribution
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DIST_ID}}
