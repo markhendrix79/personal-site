@@ -38,4 +38,3 @@ resource "aws_acm_certificate_validation" "www_markhendrix_dot_com" {
   validation_record_fqdns = [for dvo in aws_acm_certificate.www_markhendrix_dot_com.domain_validation_options :
   dvo.resource_record_name]
 }
-
